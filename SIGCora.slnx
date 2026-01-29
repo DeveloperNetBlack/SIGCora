@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/ApplicationCore/">
+    <Project Path="ApplicationCore/SIGCora.ApplicationService/SIGCora.ApplicationService.csproj" />
+    <Project Path="ApplicationCore/SIGCora.DomainModel/SIGCora.DomainModel.csproj" />
+    <Project Path="ApplicationCore/SIGCora.DomainService/SIGCora.DomainService.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/" />
+  <Folder Name="/Presentation/">
+    <Project Path="Presentation/SIGCora.Presentation.API/SIGCora.Presentation.API.csproj" Id="d20a6da6-ad97-48fb-86c5-a2ad78c09c75" />
+    <Project Path="Presentation/SIGCora.Presentation/SIGCora.Presentation.csproj" />
+  </Folder>
+</Solution>
