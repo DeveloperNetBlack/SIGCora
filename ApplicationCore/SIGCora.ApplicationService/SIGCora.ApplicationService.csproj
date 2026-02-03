@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\AuthFeatures\" />
+    <ProjectReference Include="..\..\Infrastructure\SIGC.Infrastructure.CrossCutting\SIGCora.Infrastructure.CrossCutting.csproj" />
+    <ProjectReference Include="..\SIGCora.DomainService\SIGCora.DomainService.csproj" />
   </ItemGroup>
 
 </Project>

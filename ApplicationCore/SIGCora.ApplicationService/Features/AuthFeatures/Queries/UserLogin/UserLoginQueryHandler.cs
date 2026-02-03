@@ -1,19 +1,63 @@
 ﻿using MediatR;
+using SIGCora.DomainModel.Dtos;
+using SIGCora.DomainModel.Dtos.User;
+using SIGCora.DomainService.IRepositories.IUserRepositories;
+using SIGCora.DomainService.IServices;
+using SIGCora.Infrastructure.CrossCutting.Constants;
+using SIGCora.Infrastructure.CrossCutting.Enums;
+using SIGCora.Infrastructure.CrossCutting.Wrappers;
+using System.ComponentModel.DataAnnotations;
 
 namespace SIGCora.ApplicationService.Features.AuthFeatures.Queries.UserLogin
 {
-    internal class UserLoginQueryHandler : IRequestHandler<UserLoginQueryRequest, string>
+    internal class UserLoginQueryHandler(IUserLoginRepository UserLoginRepository, IMessageService MessageService, IGenerateTokenService GenerateTokenService) : IRequestHandler<UserLoginQueryRequest, MsgResponse<object>>
     {
-        public async Task<string> Handle(UserLoginQueryRequest request, CancellationToken cancellationToken)
+        public async Task<MsgResponse<object>> Handle(UserLoginQueryRequest request, CancellationToken cancellationToken)
         {
-            var response = UserList().FirstOrDefault(u =>
-                u.CompanyDocumentNumber == request.CompanyDocumentNumber &&
-                u.UserName == request.UserName &&
-                u.UserPassword == request.UserPassword);
+            var UserLoginRequest = new UserLoginRequestDto()
+            {
+                CompanyDocumentNumber = request.CompanyDocumentNumber,
+                UserName = request.UserName,
+                UserPassword = request.UserPassword
+            };
 
-            if (response is null) return "Usuario o contraseña incorrecta.";
+            var UserLoginResponse = await UserLoginRepository.GetAsync(UserLoginRequest);
+            var MsgResponse = new MsgResponse<object>();
+            var response = await UserLoginRepository.GetAsync(UserLoginRequest);
+            MsgResponse.Type = MessageTypeConst.QUERY;
 
-            return $"Bienvenido {response.UserName}";
+            if (UserLoginResponse == default)
+            {
+                MsgResponse.Message = MessageService.GetMessageResult(MessageDescriptionConst.INVALID_CREDENTIAL);
+                MsgResponse.Type = MessageTypeConst.ERROR;
+            }
+            else
+            {
+                MsgResponse.Message = MessageService.GetMessageResult(MessageDescriptionConst.VALID_CREDENTIAL);
+
+                AppUserDto appUser = new AppUserDto
+                {
+                    UserID = UserLoginResponse.UserId,
+                    UserName = request.UserName,
+                    UserFirstName = UserLoginResponse.UserFirstName,
+                    UserLastName = UserLoginResponse.UserLastName,
+                    UserMail = UserLoginResponse.UserEmail,
+                    CompanyID = UserLoginResponse.CompanyID,
+                    CompanyDocumentNumber = UserLoginResponse.CompanyDocumentNumber,
+                    CompanyTradeName = UserLoginResponse.CompanyTradeName,
+                    CompanySocialReason = UserLoginResponse.CompanySocialReason,
+                    RoleCodes = "1,2",
+                    IdiomID = (short)IdiomEnum.Spanish
+                };
+
+                var AccessToken = await GenerateTokenService.GenerateJWTToken(appUser);
+                MsgResponse.Data = new
+                {
+                    AccessToken = AccessToken
+                };
+            }
+
+            return MsgResponse;
         }
 
         private List<Commons.UserResponseDto> UserList()
