@@ -4,7 +4,10 @@
     <Project Path="ApplicationCore/SIGCora.DomainModel/SIGCora.DomainModel.csproj" />
     <Project Path="ApplicationCore/SIGCora.DomainService/SIGCora.DomainService.csproj" />
   </Folder>
-  <Folder Name="/Infrastructure/" />
+  <Folder Name="/Infrastructure/">
+    <Project Path="Infrastructure/SIGC.Infrastructure.CrossCutting/SIGCora.Infrastructure.CrossCutting.csproj" Id="0e2e54f3-473c-491d-b867-c0bacdf44504" />
+    <Project Path="Infrastructure/SIGCora.Infrastructure.GeneralService/SIGCora.Infrastructure.GeneralService.csproj" Id="db72cd23-2ead-4596-b110-050bf51fa953" />
+  </Folder>
   <Folder Name="/Presentation/">
     <Project Path="Presentation/SIGCora.Presentation.API/SIGCora.Presentation.API.csproj" Id="d20a6da6-ad97-48fb-86c5-a2ad78c09c75" />
     <Project Path="Presentation/SIGCora.Presentation/SIGCora.Presentation.csproj" />
