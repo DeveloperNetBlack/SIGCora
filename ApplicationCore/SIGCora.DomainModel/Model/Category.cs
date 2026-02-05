@@ -28,14 +28,14 @@ namespace SIGCora.DomainModel.Model
 
             Valid(categoryName, createBy);
 
-            return new Category
+            return new Category()
             {
                 CategoryName = categoryName,
                 StateID = stateId,
                 CreateBy = createBy,
                 UpdateBy = createBy,
-                CreateDate = DateTime.UtcNow,
-                UpdateDate = DateTime.UtcNow
+                CreateDate = DateTime.Now,
+                UpdateDate = DateTime.Now
             };
         }
 
@@ -43,13 +43,25 @@ namespace SIGCora.DomainModel.Model
         {
             Valid(categoryName, updateBy);
 
-            return new Category
+            return new Category()
             {
                 CategoryId = categoryId,
                 CategoryName = categoryName,
                 StateID = stateId,
                 UpdateBy = updateBy,
-                UpdateDate = DateTime.UtcNow
+                UpdateDate = DateTime.Now
+            };
+        }
+
+        public static Category ChangeState(int categoryId, StateEnum stateId, int updateBy)
+        {
+
+            return new Category()
+            {
+                CategoryId = categoryId,
+                StateID = stateId,
+                UpdateBy = updateBy,
+                UpdateDate = DateTime.Now
             };
         }
 
